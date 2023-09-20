@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'server is active!',
+    message: 'server is active on vercel!',
   });
 });
 
