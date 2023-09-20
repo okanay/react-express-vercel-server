@@ -7,7 +7,7 @@
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "lint": "eslint --fix src test",
+    "lint": "eslint --fix src ../server/test",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "vercel-build" : "echo hello"
