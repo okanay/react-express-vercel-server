@@ -3,6 +3,8 @@ import express from 'express';
 import MessageResponse from '../interfaces/MessageResponse';
 import emojis from './emojis';
 
+const hey = "hey"
+
 const router = express.Router();
 
 router.get<{}, MessageResponse>('/', (req, res) => {
