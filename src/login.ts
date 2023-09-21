@@ -5,7 +5,7 @@ import {
   TUser,
   TDecodedAuthUser,
   TLoginResponse,
-  TAuthUserData,
+  TAuthUser,
 } from "../types/auth-types";
 
 const router = express.Router();
@@ -21,7 +21,7 @@ const user: TUser = {
     id: "1234",
     email: "okanay@hotmail.com",
     username: "wokanay",
-    name: "Okan",
+    firstName: "Okan",
     lastName: "Ay",
     image: "http:localhost:3000",
   },
@@ -56,7 +56,14 @@ router.post("/", async (req, res) => {
     return res.status(401).send("Kullanıcı adı veya şifre hatalı");
   }
 
-  const { hashPassword, ...authUser } = user;
+  const { hashPassword, profile, ...authUserBody } = user;
+  const { id, ...authProfile } = profile!;
+
+  const authUser: TAuthUser = {
+    user: authUserBody,
+    profile: authProfile,
+  };
+
   const token = jsonwebtoken.sign({ user: authUser }, jwtKey, {
     expiresIn: "1d",
   });

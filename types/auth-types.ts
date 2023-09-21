@@ -12,16 +12,19 @@ export type TUser = {
 export type TUserProfile = {
   id: string;
   username: string;
-  name: string;
+  firstName: string;
   lastName: string;
   email: string;
   image: string;
 };
 
-export type TAuthUserData = Omit<TUser, "hashPassword">;
+export type TAuthUser = {
+  user: Omit<TUser, "hashPassword">;
+  profile?: Omit<TUserProfile, "id">;
+};
 
 export type TDecodedAuthUser = {
-  user: TAuthUserData;
+  user: TAuthUser;
 } & TJwtUnionExpire;
 
 export type TJwtUnionExpire = {
@@ -31,7 +34,7 @@ export type TJwtUnionExpire = {
 
 export type TLoginResponse = {
   token: string;
-  user: TAuthUserData;
+  user: TAuthUser;
 };
 
 export type TDecodedAuthUserResponse = {

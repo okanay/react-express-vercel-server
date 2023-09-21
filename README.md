@@ -3,7 +3,7 @@
 How to use this template:
 
 ```sh
-npx create-express-api --typescript --directory my-api-name
+npx create-express-api --typescript --directory my-api-firstName
 ```
 
 Includes API Server utilities:
