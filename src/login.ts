@@ -1,25 +1,39 @@
 import express from 'express';
-import jsonwebtoken from 'jsonwebtoken';
+import jsonwebtoken, { JwtPayload, verify } from "jsonwebtoken";
 
 
 const router = express.Router();
 const jwtKey = process.env.JWT || 'no-key';
 
+
+type TToken = {
+  id : string,
+  iat : number,
+  exp : number
+}
+
 router.get('/', async (req, res) => {
-  const token = req.headers.authorization;
+
+
+  const currentTime = Date.now()
+
+  let token = req.headers.authorization;
+  let decode;
 
   if (!token) {
     return res.status(401).send('Oturum açmanız gerekiyor');
   }
 
   try {
-    const decodedToken = jsonwebtoken.verify(token, jwtKey);
-  } catch (err) {
+    decode = verify(token, jwtKey)
+  }
+  catch (err)
+  {
+    console.log('error');
     return res.status(401).send('Oturumunuz süresi dolmuş veya token geçersiz');
-    // return res.status(401).send({ message: 'Oturumunuz süresi dolmuş veya token geçersiz', error: true });
   }
 
-  res.status(200).send({ token });
+  res.status(200).send({ token, decode: decode });
 });
 
 router.post('/', async (req, res) => {
