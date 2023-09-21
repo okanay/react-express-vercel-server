@@ -6,34 +6,27 @@ const router = express.Router();
 const jwtKey = process.env.JWT || 'no-key';
 
 
-type TToken = {
-  id : string,
-  iat : number,
-  exp : number
-}
-
 router.get('/', async (req, res) => {
-
-
-  const currentTime = Date.now()
-
   let token = req.headers.authorization;
   let decode;
 
-  if (!token) {
-    return res.status(401).send('Oturum açmanız gerekiyor');
-  }
+  if (!token) return res.status(401).send('Oturum açmanız gerekiyor');
 
-  try {
+  try
+  {
     decode = verify(token, jwtKey)
   }
   catch (err)
   {
-    console.log('error');
     return res.status(401).send('Oturumunuz süresi dolmuş veya token geçersiz');
   }
 
-  res.status(200).send({ token, decode: decode });
+  res.status(200).send({
+    data: {
+      decode,
+      token
+    },
+  });
 });
 
 router.post('/', async (req, res) => {
