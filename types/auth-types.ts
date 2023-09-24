@@ -30,6 +30,7 @@ export type TDecodedAuthUser = {
 export type TJwtUnionExpire = {
   iat: number;
   exp: number;
+  aud: string;
 };
 
 export type TLoginResponse = {

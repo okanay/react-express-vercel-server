@@ -1,5 +1,5 @@
 import express from "express";
-import jsonwebtoken, { JwtPayload, verify } from "jsonwebtoken";
+import { verify, sign } from "jsonwebtoken";
 import jwtDecode from "jwt-decode";
 import {
   TUser,
@@ -27,22 +27,48 @@ const user: TUser = {
   },
 };
 
+function signedUser(user: TUser): { token: string; authUser: TAuthUser } {
+  const { hashPassword, profile, ...authUserBody } = user;
+  const { id, ...authProfile } = profile!;
+
+  const authUser: TAuthUser = {
+    user: authUserBody,
+    profile: authProfile,
+  };
+
+  const token = sign({ user: authUser }, jwtKey, {
+    expiresIn: "1d",
+    algorithm: "HS512",
+    audience: "wokanay",
+    mutatePayload: true,
+  });
+
+  return { token, authUser: authUser };
+}
+
 router.get("/", async (req, res) => {
   let token: string | undefined = req.headers["authorization"];
   if (!token) return res.status(401).send("Oturum açmanız gerekiyor");
 
   try {
-    verify(token, jwtKey, (error, decoded) => {
+    verify(token, jwtKey, (error) => {
       const decode: TDecodedAuthUser = jwtDecode(token as string);
 
-      const loginResponse: TLoginResponse = {
-        user: decode.user,
-        token: token as string,
-      };
+      if (decode.user.user.accessToken === user.accessToken) {
+        const { token, authUser } = signedUser(user);
+        const loginResponse: TLoginResponse = {
+          user: authUser,
+          token: token,
+        };
 
-      return res
-        .status(200)
-        .send({ token: loginResponse.token, user: loginResponse.user });
+        return res
+          .status(200)
+          .send({ token: loginResponse.token, user: loginResponse.user });
+      } else {
+        return res
+          .status(401)
+          .send("Oturumunuz süresi dolmuş veya token geçersiz");
+      }
     });
   } catch (err) {
     return res.status(401).send("Oturumunuz süresi dolmuş veya token geçersiz");
@@ -56,18 +82,7 @@ router.post("/", async (req, res) => {
     return res.status(401).send("Kullanıcı adı veya şifre hatalı");
   }
 
-  const { hashPassword, profile, ...authUserBody } = user;
-  const { id, ...authProfile } = profile!;
-
-  const authUser: TAuthUser = {
-    user: authUserBody,
-    profile: authProfile,
-  };
-
-  const token = jsonwebtoken.sign({ user: authUser }, jwtKey, {
-    expiresIn: "1d",
-  });
-
+  const { token, authUser } = signedUser(user);
   const loginResponse: TLoginResponse = {
     user: authUser,
     token: token,

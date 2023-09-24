@@ -1,26 +1,27 @@
-import express from 'express';
-import morgan from 'morgan';
-import helmet from 'helmet';
-import cors from 'cors';
+import express from "express";
+import morgan from "morgan";
+import helmet from "helmet";
+import cors from "cors";
 
-import login from "./login"
+import login from "./login";
+import axios from "axios";
+import * as cheerio from "cheerio";
 
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(helmet());
 
-
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.json({
-    message: 'server is active on vercel.',
+    message: "server is active on vercel.",
   });
 });
 
-app.use('/login', login);
+app.use("/login", login);
 
 export default app;
