@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer";
-import chrome from "chrome-aws-lambda";
+
 import {
   dummyUrl,
   headerOptions,
