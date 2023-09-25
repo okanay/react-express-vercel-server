@@ -1,15 +1,39 @@
-import express from "express";
-import puppeteer, { ElementHandle } from "puppeteer";
 import {
   dummyUrl,
   headerOptions,
   languageOptions,
 } from "../helper/puppeter/options";
 
+import express from "express";
+import chrome from "chrome-aws-lambda";
+
+// @ts-ignore
+import { puppeteer as puppeteerCore } from "puppeteer-core";
+import puppeteer, {
+  Browser,
+  BrowserLaunchArgumentOptions,
+  PuppeteerNode,
+} from "puppeteer";
+
 const router = express.Router();
 
+let options;
+let browser: Browser;
+
 router.get("/", async (req, res) => {
-  const browser = await puppeteer.launch({ headless: "new" });
+  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    options = {
+      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
+      defaultViewport: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
+      ignoreHTTPErrors: true,
+      headless: true,
+    };
+    browser = (await puppeteerCore.launch()) as Browser;
+  } else {
+    browser = await puppeteer.launch({ headless: true });
+  }
+
   const srcsets: string[] = [];
 
   try {
