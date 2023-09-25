@@ -9,10 +9,7 @@ import {
 import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer";
 
 router.get("/", async (req, res) => {
-  const browser = await puppeteer
-    .launch({ headless: "new" })
-    .catch((e) => res.json({ error: true, e }));
-
+  const browser = await puppeteer.launch({ headless: "new" });
   const srcsets: string[] = [];
 
   try {
