@@ -18,7 +18,7 @@ export async function BrowserMaker() {
     options = {
       headless: true,
       ignoreHTTPSErrors: true,
-      // executablePath: await chrome.executablePath,
+      executablePath: await chrome.executablePath,
       args: [
         ...chrome.args,
         "--hide-scrollbars",
