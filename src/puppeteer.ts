@@ -1,50 +1,18 @@
 import express from "express";
 const router = express.Router();
-import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer";
-
 import {
   dummyUrl,
   headerOptions,
   languageOptions,
 } from "../helper/puppeter/options";
 
-export async function BrowserMaker() {
-  let options: PuppeteerLaunchOptions;
-  let browser: Browser;
-
-  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-    let core = await require("puppeteer-core");
-    let chrome = await require("chrome-aws-lambda");
-    options = {
-      channel: "chrome",
-      headless: true,
-      ignoreHTTPSErrors: true,
-      executablePath: await chrome.executablePath,
-      defaultViewport: chrome.defaultViewport,
-      args: [
-        ...chrome.args,
-        "--hide-scrollbars",
-        "--disable-web-security",
-        // "--no-sandbox",
-        // "--disable-gpu",
-        // "--disable-extensions",
-        // "--dns-prefetch-disable",
-        // "--disable-dev-shm-usage",
-        // "--ignore-certificate-errors",
-        // "--allow-running-insecure-content",
-        // "--enable-features=NetworkService",
-      ],
-    };
-    browser = await core.launch(options);
-  } else {
-    browser = await puppeteer.launch({ headless: "new" });
-  }
-
-  return browser as Browser;
-}
+import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer";
 
 router.get("/", async (req, res) => {
-  const browser = await BrowserMaker();
+  const browser = await puppeteer
+    .launch({ headless: "new" })
+    .catch((e) => res.json({ error: true, e }));
+
   const srcsets: string[] = [];
 
   try {

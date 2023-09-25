@@ -61,3 +61,38 @@
 // } catch (e) {
 //   return res.json({ ok: false });
 // }
+
+// import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer";
+//
+// export async function BrowserMaker() {
+//   let options: PuppeteerLaunchOptions;
+//   let browser: Browser;
+//
+//   if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+//     options = {
+//       channel: "chrome",
+//       headless: true,
+//       ignoreHTTPSErrors: true,
+//       executablePath: await chrome.executablePath,
+//       defaultViewport: chrome.defaultViewport,
+//       args: [
+//         ...chrome.args,
+//         "--hide-scrollbars",
+//         "--disable-web-security",
+//         // "--no-sandbox",
+//         // "--disable-gpu",
+//         // "--disable-extensions",
+//         // "--dns-prefetch-disable",
+//         // "--disable-dev-shm-usage",
+//         // "--ignore-certificate-errors",
+//         // "--allow-running-insecure-content",
+//         // "--enable-features=NetworkService",
+//       ],
+//     };
+//     browser = await core.launch(options);
+//   } else {
+//     browser = await puppeteer.launch({ headless: "new" });
+//   }
+//
+//   return browser as Browser;
+// }
