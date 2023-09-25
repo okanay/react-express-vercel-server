@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
     headless: chromium.headless,
     ignoreHTTPSErrors: true,
   });
+
   const srcsets: string[] = [];
 
   try {
