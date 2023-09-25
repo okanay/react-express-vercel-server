@@ -33,7 +33,7 @@ export async function BrowserMaker() {
         "--enable-features=NetworkService",
       ],
     };
-    browser = core.launch(options);
+    browser = await core.launch(options);
   } else {
     browser = await puppeteer.launch({ headless: "new" });
   }
