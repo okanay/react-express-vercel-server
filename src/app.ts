@@ -4,8 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 
 import login from "./login";
-import axios from "axios";
-import * as cheerio from "cheerio";
+import puppeteer from "./puppeteer";
 
 require("dotenv").config();
 
@@ -23,5 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/login", login);
+
+app.use("/puppeteer", puppeteer);
 
 export default app;
