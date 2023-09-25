@@ -6,10 +6,16 @@ import {
   languageOptions,
 } from "../helper/puppeter/options";
 
-import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer";
+import chromium from "chrome-aws-lambda";
 
 router.get("/", async (req, res) => {
-  const browser = await puppeteer.launch();
+  const browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+    ignoreHTTPSErrors: true,
+  });
   const srcsets: string[] = [];
 
   try {
