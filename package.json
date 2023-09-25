@@ -23,7 +23,7 @@
     "@types/cheerio": "^0.22.32",
     "axios": "^1.5.0",
     "cheerio": "^1.0.0-rc.12",
-    "chrome-aws-lambda": "^10.1.0",
+    "chrome-aws-lambda": "^6",
     "cors": "^2.8.5",
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
