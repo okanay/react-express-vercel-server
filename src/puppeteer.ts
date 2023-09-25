@@ -1,39 +1,48 @@
+import express from "express";
+const router = express.Router();
+import puppeteer, { Browser, PuppeteerLaunchOptions } from "puppeteer";
+import chrome from "chrome-aws-lambda";
 import {
   dummyUrl,
   headerOptions,
   languageOptions,
 } from "../helper/puppeter/options";
 
-import express from "express";
-import chrome from "chrome-aws-lambda";
+export async function BrowserMaker() {
+  let options: PuppeteerLaunchOptions;
+  let browser: Browser;
 
-// @ts-ignore
-import { puppeteer as puppeteerCore } from "puppeteer-core";
-import puppeteer, {
-  Browser,
-  BrowserLaunchArgumentOptions,
-  PuppeteerNode,
-} from "puppeteer";
-
-const router = express.Router();
-
-let options;
-let browser: Browser;
-
-router.get("/", async (req, res) => {
   if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    let core = require("puppeteer-core");
+    let chrome = require("chrome-aws-lambda");
     options = {
-      args: [...chrome.args, "--hide-scrollbars", "--disable-web-security"],
-      defaultViewport: chrome.defaultViewport,
-      executablePath: await chrome.executablePath,
-      ignoreHTTPErrors: true,
       headless: true,
+      ignoreHTTPSErrors: true,
+      // executablePath: await chrome.executablePath,
+      args: [
+        ...chrome.args,
+        "--hide-scrollbars",
+        "--disable-web-security",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-extensions",
+        "--dns-prefetch-disable",
+        "--disable-dev-shm-usage",
+        "--ignore-certificate-errors",
+        "--allow-running-insecure-content",
+        "--enable-features=NetworkService",
+      ],
     };
-    browser = (await puppeteerCore.launch()) as Browser;
+    browser = core.launch(options);
   } else {
-    browser = await puppeteer.launch({ headless: true });
+    browser = await puppeteer.launch({ headless: "new" });
   }
 
+  return browser as Browser;
+}
+
+router.get("/", async (req, res) => {
+  const browser = await BrowserMaker();
   const srcsets: string[] = [];
 
   try {
