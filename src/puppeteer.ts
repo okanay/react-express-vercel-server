@@ -13,24 +13,26 @@ export async function BrowserMaker() {
   let browser: Browser;
 
   if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-    let core = require("puppeteer-core");
-    let chrome = require("chrome-aws-lambda");
+    let core = await require("puppeteer-core");
+    let chrome = await require("chrome-aws-lambda");
     options = {
+      channel: "chrome",
       headless: true,
       ignoreHTTPSErrors: true,
       executablePath: await chrome.executablePath,
+      defaultViewport: chrome.defaultViewport,
       args: [
         ...chrome.args,
         "--hide-scrollbars",
         "--disable-web-security",
-        "--no-sandbox",
-        "--disable-gpu",
-        "--disable-extensions",
-        "--dns-prefetch-disable",
-        "--disable-dev-shm-usage",
-        "--ignore-certificate-errors",
-        "--allow-running-insecure-content",
-        "--enable-features=NetworkService",
+        // "--no-sandbox",
+        // "--disable-gpu",
+        // "--disable-extensions",
+        // "--dns-prefetch-disable",
+        // "--disable-dev-shm-usage",
+        // "--ignore-certificate-errors",
+        // "--allow-running-insecure-content",
+        // "--enable-features=NetworkService",
       ],
     };
     browser = await core.launch(options);
