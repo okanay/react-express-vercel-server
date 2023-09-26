@@ -8,7 +8,7 @@ import {
 import puppeteer from "puppeteer";
 
 router.get("/", async (req, res) => {
-  const browser = await puppeteer.launch({ headless: "new" });
+  const browser = await puppeteer.launch();
 
   const srcsets: string[] = [];
 
