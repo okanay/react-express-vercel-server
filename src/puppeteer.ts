@@ -5,17 +5,10 @@ import {
   headerOptions,
   languageOptions,
 } from "../helper/puppeter/options";
-
-import chromium from "chrome-aws-lambda";
+import puppeteer from "puppeteer";
 
 router.get("/", async (req, res) => {
-  const browser = await chromium.puppeteer.launch({
-    args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath,
-    headless: true,
-    ignoreHTTPSErrors: true,
-  });
+  const browser = await puppeteer.launch({ headless: "new" });
 
   const srcsets: string[] = [];
 
