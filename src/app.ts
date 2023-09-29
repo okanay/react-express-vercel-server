@@ -3,7 +3,6 @@ import morgan from "morgan";
 import cors from "cors";
 
 import login from "./login";
-import puppeteer from "./puppeteer";
 
 require("dotenv").config();
 
@@ -20,7 +19,5 @@ app.get("/", (req, res) => {
 });
 
 app.use("/login", login);
-
-app.use("/puppeteer", puppeteer);
 
 export default app;
